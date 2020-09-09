@@ -2,8 +2,11 @@ package com.swann.reactandspring.entity.user;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.swann.reactandspring.Time;
+import com.sun.xml.bind.v2.model.core.ID;
+import com.swann.reactandspring.entity.UserPost.UserContent;
+import com.swann.reactandspring.service.Time;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,11 +14,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
-public class User extends Time implements UserDetails {
+public class User extends Time<ID> implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -42,6 +48,22 @@ public class User extends Time implements UserDetails {
     @NotNull(message = "Please enter confirm password")
     @Transient
     private String confirm;
+
+    @JsonIgnore
+    private String profilePicture;
+
+    @JsonIgnore
+    private String fileName;
+
+    @JsonIgnore
+    private String fileType;
+
+    @JsonIgnore
+    @Lob
+    private byte[] data;
+
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
+    private List<UserContent> contents = new ArrayList<>();
 
 
     /*

@@ -19,14 +19,15 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         User user = repository.findByUsername(username);
 
-        if (user == null) new UsernameNotFoundException("User not found");
+        if (user == null) throw new UsernameNotFoundException("User not found");
         return user;
     }
+
 
     @Transactional
     public User loadUserById(Long id){
         User user = repository.getById(id);
-        if (user == null) new UsernameNotFoundException("User not found");
+        if (user == null) throw new UsernameNotFoundException("User not found");
         return user;
     }
 }

@@ -1,4 +1,4 @@
-package com.swann.reactandspring;
+package com.swann.reactandspring.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -6,10 +6,15 @@ import lombok.Data;
 import javax.persistence.*;
 import java.util.Date;
 @Data
-public class Time {
+@MappedSuperclass
+public abstract class Time<ID> {
+
     @JsonIgnore
+    @Column(name = "created_date")
     private Date CreateDate;
+
     @JsonIgnore
+    @Column(name = "updated_date")
     private Date UpdateDate;
 
     @PrePersist
